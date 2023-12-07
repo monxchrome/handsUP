@@ -10,3 +10,5 @@ For installing libs past -> pip install -r requirements.txt
 
 --Complete--
 1. HandsDetection +
+2. MouseVision
+   
