@@ -1,4 +1,3 @@
-
 import cv2
 import mediapipe as mp
 import time
@@ -7,58 +6,57 @@ import numpy as np
 
 
 class handDetector:
-    def __init__(self, mode=False, maxHands=2, detectionCon=0.5, trackCon=0.5):
-        self.mode = mode
-        self.maxHands = maxHands
-        self.detectionCon = detectionCon
-        self.trackCon = trackCon
+    def __init__(self, mode=False, maxHands=1, detectionCon=0.5, trackCon=0.5):
+        self.mode = mode  # Режим работы (по умолчанию False)
+        self.maxHands = maxHands  # Максимальное количество рук для отслеживания (по умолчанию 2)
+        self.detectionCon = detectionCon  # Уровень уверенности для обнаружения руки (по умолчанию 0.5)
+        self.trackCon = trackCon  # Уровень уверенности для отслеживания руки (по умолчанию 0.5)
 
-        self.mpHands = mp.solutions.hands
+        self.mpHands = mp.solutions.hands  # Инициализация модуля Mediapipe для работы с руками
         self.hands = self.mpHands.Hands(
             static_image_mode=False,
-            max_num_hands=2,
+            max_num_hands=1,
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5,
-        )
+        )  # Создание объекта для отслеживания рук с настройками
 
-        self.mpDraw = mp.solutions.drawing_utils
-        self.tipIds = [4, 8, 12, 16, 20]
+        self.mpDraw = mp.solutions.drawing_utils  # Инициализация модуля Mediapipe для рисования
+        self.tipIds = [4, 8, 12, 16, 20]  # Идентификаторы кончиков пальцев
 
     def findHands(self, img, draw=True):
         if img is None or img.size == 0:
             print("Ошибка: Изображение пусто.")
             return img
 
-        imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        self.results = self.hands.process(imgRGB)
+        imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Преобразование цветового пространства из BGR в RGB
+        self.results = self.hands.process(imgRGB)  # Обработка изображения для поиска рук с использованием Mediapipe
 
         if self.results.multi_hand_landmarks:
             for handLms in self.results.multi_hand_landmarks:
                 if draw:
                     self.mpDraw.draw_landmarks(
                         img, handLms, self.mpHands.HAND_CONNECTIONS
-                    )
+                    )  # Рисование маркеров и соединительных линий рук на изображении
+
 
         return img
 
     def findPosition(self, img, handNo=0, draw=True):
-        xList = []
-        yList = []
-        bbox = []
-        self.lmList = []
+        xList = []  # Список координат x
+        yList = []  # Список координат y
+        bbox = []  # Границы прямоугольника вокруг обнаруженной руки
+        self.lmList = []  # Список координат ключевых точек руки
 
         if hasattr(self, "results") and self.results.multi_hand_landmarks:
             myHand = self.results.multi_hand_landmarks[handNo]
             for id, lm in enumerate(myHand.landmark):
-                # print(id, lm)
                 h, w, c = img.shape
                 cx, cy = int(lm.x * w), int(lm.y * h)
                 xList.append(cx)
                 yList.append(cy)
-                # print(id, cx, cy)
                 self.lmList.append([id, cx, cy])
                 if draw:
-                    cv2.circle(img, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
+                    cv2.circle(img, (cx, cy), 5, (0, 0, 0), cv2.FILLED)  # Рисование точек ключевых точек руки
 
             xmin, xmax = min(xList), max(xList)
             ymin, ymax = min(yList), max(yList)
@@ -67,26 +65,24 @@ class handDetector:
             if draw:
                 cv2.rectangle(
                     img, (xmin - 20, ymin - 20), (xmax + 20, ymax + 20), (0, 255, 0), 2
-                )
+                )  # Рисование прямоугольника вокруг руки
 
-        return self.lmList, bbox
+        return self.lmList, bbox  # Возврат списка ключевых точек и границ прямоугольника
 
     def fingersUp(self):
-        fingers = []
-        # Thumb
+        fingers = []  # Список, отражающий положение пальцев
+        # Thumb (большой палец)
         if self.lmList[self.tipIds[0]][1] > self.lmList[self.tipIds[0] - 1][1]:
-            fingers.append(1)
+            fingers.append(1)  # Палец поднят
         else:
-            fingers.append(0)
+            fingers.append(0)  # Палец опущен
 
-        # Fingers
+        # Fingers (остальные пальцы)
         for id in range(1, 5):
             if self.lmList[self.tipIds[id]][2] < self.lmList[self.tipIds[id] - 2][2]:
-                fingers.append(1)
+                fingers.append(1)  # Палец поднят
             else:
-                fingers.append(0)
-
- 
+                fingers.append(0)  # Палец опущен
 
         return fingers
 
@@ -96,39 +92,38 @@ class handDetector:
         cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
 
         if draw:
-            cv2.line(img, (x1, y1), (x2, y2), (255, 0, 255), t)
-            cv2.circle(img, (x1, y1), r, (255, 0, 255), cv2.FILLED)
-            cv2.circle(img, (x2, y2), r, (255, 0, 255), cv2.FILLED)
-            cv2.circle(img, (cx, cy), r, (0, 0, 255), cv2.FILLED)
-        length = math.hypot(x2 - x1, y2 - y1)
+            cv2.line(img, (x1, y1), (x2, y2), (0, 0, 0), t)  # Рисование линии между двумя точками
+            cv2.circle(img, (x1, y1), r, (255, 0, 255), cv2.FILLED)  # Рисование круга вокруг первой точки
+            cv2.circle(img, (x2, y2), r, (255, 0, 255), cv2.FILLED)  # Рисование круга вокруг второй точки
+            cv2.circle(img, (cx, cy), r, (0, 0, 255), cv2.FILLED)  # Рисование круга вокруг центра линии
+        length = math.hypot(x2 - x1, y2 - y1)  # Вычисление длины линии между точками
 
-        return length, img, [x1, y1, x2, y2, cx, cy]
+        return length, img, [x1, y1, x2, y2, cx, cy]  # Возврат длины линии, изображения с нарисованными элементами и координат центра
 
 
 def main():
-    pTime = 0
-    cTime = 0
-    cap = cv2.VideoCapture(0)
-    detector = handDetector()
+    pTime = 0  # Предыдущее время (для расчета FPS)
+    cTime = 0  # Текущее время
+    cap = cv2.VideoCapture(0)  # Инициализация захвата видео с камеры
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 700)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    detector = handDetector()  # Создание объекта для обнаружения рук
     while True:
-        success, img = cap.read()
-
+        success, img = cap.read()  # Захват текущего кадра с камеры
 
         if not success:
             print("Ошибка: Не удалось считать кадр.")
             break
 
-        img = detector.findHands(img)
-        lmList, bbox = detector.findPosition(img)
+        img = detector.findHands(img)  # Поиск рук на изображении
+        lmList, bbox = detector.findPosition(img)  # Поиск позиции рук на изображении
 
- 
         if len(lmList) != 0:
-            print(lmList[4])
+            print(lmList[4])  # Вывод координат четвертой ключевой точки руки
 
-        cTime = time.time()
-        fps = 1 / (cTime - pTime)
-        pTime = cTime
-
+        cTime = time.time()  # Получение текущего времени
+        fps = 1 / (cTime - pTime)  # Расчет FPS
+        pTime = cTime  # Обновление предыдущего времени
 
         if img is not None and img.size != 0:
             cv2.putText(
@@ -139,17 +134,16 @@ def main():
                 3,
                 (255, 0, 255),
                 3,
-            )
+            )  # Нанесение текста с FPS на изображение
 
-            cv2.imshow("Image", img)
+            cv2.imshow("Image", img)  # Отображение изображения
 
-    
         if cv2.waitKey(1) & 0xFF == ord("q"):
-            break
+            break  # Прерывание цикла при нажатии клавиши "q"
 
-    cap.release()
-    cv2.destroyAllWindows()
+    cap.release()  # Освобождение ресурсов захвата видео
+    cv2.destroyAllWindows()  # Закрытие всех окон OpenCV
 
 
 if __name__ == "__main__":
-    main()
+    main()  # Вызов функции main при запуске скрипта
