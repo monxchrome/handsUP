@@ -16,7 +16,6 @@ Detecting hand parts, controlling windows media controllers using gestures, and 
 * [Features](#-features)
 * [Getting Started](#-getting-started)
 * [Project Roadmap](#-project-roadmap)
-* [Contributing](#-contributing)
 * [License](#-license)
 
 ---
@@ -56,22 +55,22 @@ Detecting hand parts, controlling windows media controllers using gestures, and 
 <div>
     <details>
         <summary style="display: flex; align-items: center;">
-            <span style="font-size: 2.0em;"> ❷ Lane Detection on Roads</span>
+            <span style="font-size: 2.0em;"> ❷ Virtual Mouse Functionality</span>
         </summary>
         <table>
             <tr>
                 <td colspan="2">
-                    <h4><i>Lane Detection on Roads</i></h4>
+                    <h4><i>Virtual Mouse Functionality</i></h4>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <p>‣ Equipped with advanced computer vision algorithms, our AI accurately identifies road lines. This functionality is crucial for implementing automated lane-changing maneuvers. The AI automatically analyzes the surrounding environment, identifies available lanes, and makes decisions for safe lane changes in accordance with traffic rules.</p>
+                    <p>‣ Our AI is equipped with advanced virtual mouse capabilities, allowing users to interact with their computer screens using hand gestures. Navigate through applications, click, and scroll effortlessly in a virtual environment, providing a hands-free and intuitive computing experience.</p>
                 </td>
             </tr>
             <tr>
                 <td align="center">
-                    <img src="./public/2.png" alt="repository-tree" />
+                    <img src="./public/1.gif" alt="repository-tree" />
                 </td>
             </tr>
         </table>
@@ -104,6 +103,47 @@ Detecting hand parts, controlling windows media controllers using gestures, and 
     </details>
 </div>
 <br>
+<div>
+    <details>
+        <summary style="display: flex; align-items: center;">
+            <span style="font-size: 2.0em;"> ❸ Intelligent Interaction</span>
+        </summary>
+        <table>
+            <tr>
+                <td colspan="2">
+                    <h4><i>Intelligent Interaction</i></h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>‣ Our AI is designed to understand and respond to your natural movements, creating a more intuitive and personalized user experience. It adapts to your gestures, providing a dynamic and responsive interaction that feels like second nature.</p>
+                </td>
+            </tr>
+        </table>
+    </details>
+</div>
+<br>
+<div>
+    <details>
+        <summary style="display: flex; align-items: center;">
+            <span style="font-size: 2.0em;"> ❹ Autonomous Interaction:</span>
+        </summary>
+        <table>
+            <tr>
+                <td colspan="2">
+                    <h4><i>Autonomous Interaction:</i></h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>‣ Experience a new level of automation as our AI learns from your behaviors, adapting and anticipating your preferences. This autonomous capability ensures a more personalized and efficient user experience over time.</p>
+                    <p>‣ Our AI isn't just a technological advancement; it's a revolutionary companion that seamlessly integrates into your digital world, providing an unparalleled level of convenience, adaptability, and interaction. Embrace the future with our intelligent AI system — your gateway to a more connected and intuitive experience.</p>
+                </td>
+            </tr>
+        </table>
+    </details>
+</div>
+<br>
 <br>
 
 <p align="right">
@@ -119,7 +159,7 @@ Detecting hand parts, controlling windows media controllers using gestures, and 
 Please ensure you have the following dependencies installed on your system:
 
 - *Python 3.9+*
-- *Pip, Docker, Poetry, Pipenv, or Conda*
+- *Pip, Pipenv, or Conda*
 
 <br>
 
@@ -163,12 +203,6 @@ pipenv shell
 ```
 
 <br>
-
-Using `poetry`
-```bash
-poetry install && \
-poetry shell
-```
 
 ---
 
