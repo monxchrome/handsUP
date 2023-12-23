@@ -277,6 +277,15 @@ python Screen Brightness.py
 
 ---
 
+---
+
+## 🛠 Literature
+
+- [OpenCV](https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html)
+- [MediaPipe](https://developers.google.com/mediapipe/framework/getting_started/python_framework)
+
+---
+
 ## 📄 License
 
 [Apache](https://github.com/monxchrome/handsUP/blob/main/LICENSE)
